@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "+pCobJy93fjl1JqN+2x5DY/whK5o4eU1zwm/i8fmjAsNh/uoJN/hfpHqsyUTEy3fbZxCpvqyv5w/EoLOdb8umQ==",
+  "success": true,
+  "projectFilePath": "/Users/enakohli/Documents/NETTest/CurveFit/CurveFit.csproj",
+  "expectedPackageFiles": [
+    "/Users/enakohli/.nuget/packages/fsharp.core/6.0.2/fsharp.core.6.0.2.nupkg.sha512",
+    "/Users/enakohli/.nuget/packages/mathnet.numerics/5.0.0/mathnet.numerics.5.0.0.nupkg.sha512",
+    "/Users/enakohli/.nuget/packages/mathnet.numerics.fsharp/5.0.0/mathnet.numerics.fsharp.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

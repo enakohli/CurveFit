@@ -1,0 +1,114 @@
+﻿@page
+@model IndexModel
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Curve Fitting</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h1>Curve Fitting</h1>
+
+    <div>
+        <canvas id="chart"></canvas>
+    </div>
+
+    <div>
+        <ul>
+            @foreach (var point in Model.PointModels)
+            {
+                <li>X: @point.X, Y: @point.Y</li>
+            }
+        </ul>
+    </div>
+
+    <div>
+        <form id="fitCurveForm" asp-page-handler="FitCurve" method="post">
+            <label for="curveType">Select Curve Type:</label>
+            <select name="curveType" id="curveType">
+                <option value="linear">Linear</option>
+                <option value="quadratic">Quadratic</option>
+                <option value="cubic">Cubic</option>
+            </select>
+
+            <br />
+            <br />
+
+            <label for="points">Enter Points:</label>
+            <textarea name="points" id="points" rows="4" cols="50" placeholder="Enter points as X,Y pairs"></textarea>
+
+            <br />
+            <br />
+
+            <input type="submit" value="Submit" onclick="submitForm()">
+        </form>
+    </div>
+
+    <div>
+        @if (!string.IsNullOrEmpty(Model.EquationOfBestFit))
+        {
+            <p>Equation of Best Fit Curve: @Model.EquationOfBestFit</p>
+        }
+    </div>
+
+    <script>
+        function submitForm() {
+            var form = document.getElementById("fitCurveForm");
+            event.preventDefault();
+
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form),
+            }).then(response => response.json()).then(data => {
+                console.log(data);
+                //update the chart to display new points on submission
+                myChart.data.datasets[0].data = data.pointModels;
+                myChart.data.datasets[1].data = data.bestFitCurve;
+                myChart.update();
+            }).catch(error => console.error('Error:', error));
+        }
+    </script>
+
+
+    <script>
+        var ctx = document.getElementById('chart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Points',
+                    data: @Html.Raw(Json.Serialize(Model.PointModels)),
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    showLine: false
+                }, {
+                    label: 'Best Fit Curve',
+                    data: @Html.Raw(Json.Serialize(Model.BestFitCurve)),
+                    type: 'line',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom'
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
